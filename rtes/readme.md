@@ -1,7 +1,5 @@
 # Docker
 
-docker login -u au_registry_devops https://registry.turknet.net.tr
-
 docker buildx build --platform=linux/amd64,linux/arm64  --tag turknethub/tn-wolfios:0.0.2 -f ./Dockerfile . --push
 
 ## Vulnerability
