@@ -16,8 +16,8 @@ RUN mkdir -p "${NewRelicHome}" && cd ${NewRelicHome} && \
 
 FROM newrelic AS rte
 
+COPY version /tmp/version
 
-ARG VERSION=8.412.08-r1
-RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-8-jre=${VERSION}
+RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-8-jre=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]

@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.2 AS newrelic
+FROM registry.turknet.net.tr/securebaseimages/tn-wolfios:0.0.2 AS newrelic
 
 ARG TARGETARCH
 ARG NewRelicVersion=10.29.0
@@ -23,8 +23,9 @@ RUN mkdir "${NewRelicHome}" && \
 
 FROM newrelic AS dotnetrte
 
-ARG VERSION=6.0.133-r0
-RUN apk update && apk add --no-cache dotnet-6=${VERSION} dotnet-6-runtime=${VERSION} aspnet-6-runtime=${VERSION}
+COPY version /tmp/version
+
+RUN apk update && apk add --no-cache dotnet-6=$(cat /tmp/version) dotnet-6-runtime=$(cat /tmp/version) aspnet-6-runtime=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
 

@@ -23,8 +23,9 @@ RUN mkdir "${NewRelicHome}" && \
 
 FROM newrelic AS dotnetrte
 
-ARG VERSION=7.0.120-r0
-RUN apk update && apk add --no-cache dotnet-7=${VERSION} dotnet-7-runtime=${VERSION} aspnet-7-runtime=${VERSION}
+COPY version /tmp/version
+
+RUN apk update && apk add --no-cache dotnet-7=$(cat /tmp/version) dotnet-7-runtime=$(cat /tmp/version) aspnet-7-runtime=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
 

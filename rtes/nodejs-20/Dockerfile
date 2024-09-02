@@ -6,8 +6,9 @@ ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY \
     NEW_RELIC_LOG=stdout
 
-ARG VERSION=20.17.0-r0
+COPY version /tmp/version
+
 RUN apk update && apk add --no-cache icu=74.2-r2 icu-dev=74.2-r2 && \
-    apk update && apk add npm=10.8.2-r0 nodejs-20=${VERSION}
+    apk update && apk add npm=10.8.2-r0 nodejs-20=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]

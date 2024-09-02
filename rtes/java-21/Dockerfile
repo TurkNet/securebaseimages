@@ -16,7 +16,8 @@ RUN mkdir -p "${NewRelicHome}" && cd ${NewRelicHome} && \
 
 FROM newrelic AS rte
 
-ARG VERSION=21.0.4-r1
-RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-21-jre=${VERSION}
+COPY version /tmp/version
+
+RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-21-jre=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
