@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          for dir in rtes sdks; do
+          for dir in rte sdk; do
             for dockerfile in $(find $dir -name Dockerfile); do
               base_dir=$(dirname $dockerfile | cut -d'/' -f1)
               sub_dir=$(basename $(dirname $dockerfile))
