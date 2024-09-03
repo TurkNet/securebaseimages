@@ -22,17 +22,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Get changed files
+        id: files
+        uses: jitterbit/get-changed-files@v1
+
       - name: Build and push Docker images
         run: |
-          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            diff_ref="HEAD^"
-          else
-            diff_ref="HEAD"
-          fi
+          changed_dirs=()
 
-          changed_dirs=$(git diff --name-only $diff_ref HEAD | grep -E '^rte|^sdk|^3rd-party' | grep 'Dockerfile' | xargs -I {} dirname {} | uniq)
+          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
+            # Check if the changed file is a Dockerfile or version file
+            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
+              dir=$(dirname "$added_modified_file")
+              changed_dirs+=("$dir")
+            fi
+          done
 
-          for dir in $changed_dirs; do
+          changed_dirs=($(echo "${changed_dirs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+
+          for dir in "${changed_dirs[@]}"; do
             dockerfile="$dir/Dockerfile"
             base_dir=$(echo $dir | cut -d'/' -f1)
             sub_dir=$(basename $dir)
