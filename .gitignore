@@ -67,3 +67,8 @@ crash.log
 *.box
 
 ~/*
+
+
+cosign*
+
+*sbom*.*.json
