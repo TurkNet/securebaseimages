@@ -20,6 +20,7 @@ RUN wget https://www.lua.org/ftp/lua-5.1.5.tar.gz \
     && make linux test \
     && make install \
     && rm -rf /tmp/lua-5.1.5*
+    
 
 WORKDIR /tmp
 
