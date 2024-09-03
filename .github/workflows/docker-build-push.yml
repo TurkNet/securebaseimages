@@ -24,14 +24,12 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          # Check if HEAD^ exists
           if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
             diff_ref="HEAD^"
           else
             diff_ref="HEAD"
           fi
 
-          # Get the list of changed Dockerfile directories
           changed_dirs=$(git diff --name-only $diff_ref HEAD | grep -E '^rte|^sdk|^3rd-party' | grep 'Dockerfile' | xargs -I {} dirname {} | uniq)
 
           for dir in $changed_dirs; do
