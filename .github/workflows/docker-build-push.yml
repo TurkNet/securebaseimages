@@ -32,12 +32,12 @@ jobs:
               base_dir=$(dirname $dockerfile | cut -d'/' -f1)
               sub_dir=$(basename $(dirname $dockerfile))
 
-              image_name="$base_dir/$sub_dir"
-              
+              image_name="$sub_dir-$base_dir"
+
               version=$(cat $(dirname $dockerfile)/version)
-              
+
               full_tag=${{ secrets.DOCKER_USERNAME }}/$image_name:$version-${{ github.run_number }}
-              
+
               docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $(dirname $dockerfile) --push
             done
           done
