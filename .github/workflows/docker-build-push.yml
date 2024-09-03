@@ -33,7 +33,7 @@ jobs:
 
               version=$(cat $(dirname $dockerfile)/version)
 
-              full_tag=${{ secrets.DOCKER_USERNAME }}/$image_name:$version-${{ github.run_number }}
+              full_tag=turknethub/$image_name:$version-${{ github.run_number }}
 
               docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $(dirname $dockerfile) --push
             done
