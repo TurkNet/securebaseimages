@@ -37,7 +37,6 @@ jobs:
             base_dir=$(echo $dir | cut -d'/' -f1)
             sub_dir=$(basename $dir)
 
-            # Adjust image naming for 3rd-party directory
             if [ "$base_dir" = "3rd-party" ]; then
               image_name="$sub_dir"
             else
