@@ -12,8 +12,6 @@ https://github.com/anchore/syft#adding-an-sbom-to-an-image-as-an-attestation-usi
 
 * Signing
 
-
-
 ```bash
 docker buildx build --platform=linux/amd64,linux/arm64 --tag turknethub/rtes/dotnet-6:6.0.133-r0-1 -f ./rtes/dotnet6-core/Dockerfile . --push
 
