@@ -1,6 +1,7 @@
 FROM cgr.dev/chainguard/wolfi-base:latest
 
 RUN apk update
+
 RUN apk add --no-cache \
 bash=5.2.32-r2 \
 busybox=1.36.1-r10 \
