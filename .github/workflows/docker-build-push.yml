@@ -24,17 +24,22 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          for dir in rte sdk; do
-            for dockerfile in $(find $dir -name Dockerfile); do
-              base_dir=$(dirname $dockerfile | cut -d'/' -f1)
-              sub_dir=$(basename $(dirname $dockerfile))
+          changed_dirs=$(git diff --name-only HEAD^ HEAD | grep -E '^rte|^sdk|^3rd-party' | grep 'Dockerfile' | xargs -I {} dirname {} | uniq)
 
+          for dir in $changed_dirs; do
+            dockerfile="$dir/Dockerfile"
+            base_dir=$(echo $dir | cut -d'/' -f1)
+            sub_dir=$(basename $dir)
+
+            if [ "$base_dir" = "3rd-party" ]; then
+              image_name="$sub_dir"
+            else
               image_name="$sub_dir-$base_dir"
+            fi
 
-              version=$(cat $(dirname $dockerfile)/version)
+            version=$(cat $dir/version)
 
-              full_tag=turknethub/$image_name:$version-${{ github.run_number }}
+            full_tag=turknethub/$image_name:$version-${{ github.run_number }}
 
-              docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $(dirname $dockerfile) --push
-            done
+            docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $dir --push
           done
