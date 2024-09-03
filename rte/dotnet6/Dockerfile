@@ -1,4 +1,4 @@
-FROM registry.turknet.net.tr/securebaseimages/tn-wolfios:0.0.2 AS newrelic
+FROM turknethub/tn-wolfios:0.0.2 AS newrelic
 
 ARG TARGETARCH
 ARG NewRelicVersion=10.29.0
