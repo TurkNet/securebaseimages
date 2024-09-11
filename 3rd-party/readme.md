@@ -57,12 +57,15 @@ docker buildx build --load --platform=linux/amd64  --tag local/openresty -f ./3r
 docker buildx build --platform=linux/amd64,linux/arm64  --tag turknethub/openresty:1.21.4.1 -f ./3rd-party/openresty/Dockerfile ./3rd-party/openresty --push
 ```
 
-* chromium
+* chrome
+
+
+[Chrome Version List JSON](https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json)
+[Chrome Version List](https://googlechromelabs.github.io/chrome-for-testing/)
 
 ```bash
 
-docker buildx build --load --platform=linux/amd64  --tag local/chromium -f ./3rd-party/chromium/Dockerfile ./3rd-party/chromium
+docker buildx build --load --platform=linux/amd64  --tag local/chrome -f ./3rd-party/chrome/Dockerfile ./3rd-party/chrome
 
-docker buildx build --platform=linux/amd64  --tag turknethub/chromium:128.0.6613.119-r0.1 -f ./3rd-party/chromium/Dockerfile ./3rd-party/chromium --push
+docker buildx build --platform=linux/amd64  --tag turknethub/chrome:128.0.6613.119-r0.1 -f ./3rd-party/chrome/Dockerfile ./3rd-party/chrome --push
 
-```
