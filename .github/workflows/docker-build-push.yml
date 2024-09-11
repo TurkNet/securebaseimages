@@ -31,7 +31,6 @@ jobs:
           changed_dirs=()
 
           for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-            # Check if the changed file is a Dockerfile or version file
             if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
               dir=$(dirname "$added_modified_file")
               changed_dirs+=("$dir")
@@ -45,10 +44,20 @@ jobs:
             base_dir=$(echo $dir | cut -d'/' -f1)
             sub_dir=$(basename $dir)
 
-            if [ "$base_dir" = "3rd-party" ]; then
-              image_name="$sub_dir"
+            if [ "$base_dir" = "wolfios-base" ]; then
+              image_name="tn-wolfios"
+
+              if [[ "$added_modified_file" == "wolfios-base/version" ]]; then
+                for sub_folder in sdk rte; do
+                  docker buildx build --platform=linux/amd64,linux/arm64 --tag turknethub/$sub_folder:$version-${{ github.run_number }} -f $dir/$sub_folder/Dockerfile $dir/$sub_folder --push
+                done
+              fi
             else
-              image_name="$sub_dir-$base_dir"
+              if [ "$base_dir" = "3rd-party" ]; then
+                image_name="$sub_dir"
+              else
+                image_name="$sub_dir-$base_dir"
+              fi
             fi
 
             version=$(cat $dir/version)
