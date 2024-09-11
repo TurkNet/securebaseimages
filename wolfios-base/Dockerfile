@@ -31,7 +31,7 @@ RUN cp /usr/share/zoneinfo/Turkey /etc/localtime
 
 # TODO: Critic zaafiyet var diye commentlendi.
 # Repoya openssl.cnf manuel eklendi.
-COPY ./wolfios-base/openssl.cnf /etc/ssl/openssl.cnf
+COPY openssl.cnf /etc/ssl/openssl.cnf
 
 # RUN sed -i 's/providers = provider_sect/providers = provider_sect\n\
 # ssl_conf = ssl_sect\n\
