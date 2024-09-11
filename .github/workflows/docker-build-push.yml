@@ -46,12 +46,6 @@ jobs:
 
             if [ "$base_dir" = "wolfios-base" ]; then
               image_name="tn-wolfios"
-
-              if [[ "$added_modified_file" == "wolfios-base/version" ]]; then
-                for sub_folder in sdk rte; do
-                  docker buildx build --platform=linux/amd64,linux/arm64 --tag turknethub/$sub_folder:$version-${{ github.run_number }} -f $dir/$sub_folder/Dockerfile $dir/$sub_folder --push
-                done
-              fi
             else
               if [ "$base_dir" = "3rd-party" ]; then
                 image_name="$sub_dir"
