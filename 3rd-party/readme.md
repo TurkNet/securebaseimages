@@ -69,3 +69,4 @@ docker buildx build --load --platform=linux/amd64  --tag local/chrome -f ./3rd-p
 
 docker buildx build --platform=linux/amd64  --tag turknethub/chrome:128.0.6613.119-r0.1 -f ./3rd-party/chrome/Dockerfile ./3rd-party/chrome --push
 
+```
