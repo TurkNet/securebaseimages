@@ -3,6 +3,7 @@ name: Security Scan and Issue Creation
 on:
   schedule:
     - cron: "0 0,6,12,18 * * *"
+  workflow_dispatch:
 
 jobs:
   security-scan:
