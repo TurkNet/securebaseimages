@@ -49,7 +49,9 @@ jobs:
           else
             issue_number=$(gh issue create --title "$issue_title" --label "security" --body "New security vulnerabilities found. See the details below:" --json number --jq '.number')
           fi
+
           find . -name 'trivy-report.json' | while read report; do
+            dir=$(dirname "$report")  # Trivy raporunun olduğu klasörü al
             jq '.[] | select(.Vulnerabilities != null) | .Vulnerabilities[]' "$report" > vulnerabilities.json
             if [ -s vulnerabilities.json ]; then
               for row in $(cat vulnerabilities.json | jq -r '. | @base64'); do
@@ -60,7 +62,7 @@ jobs:
                 DESCRIPTION="$(_jq '.Description')"
                 SEVERITY="$(_jq '.Severity')"
                 CVE="$(_jq '.CVE')"
-                gh issue comment $issue_number --body "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE"
+                gh issue comment $issue_number --body "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE\n- Directory: $dir"
               done
             fi
           done
