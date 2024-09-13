@@ -1,12 +1,12 @@
-name: Build and Push Docker Images
+name: Security Scan and Issue Creation
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "0 0,6,12,18 * * *"
+  workflow_dispatch:
 
 jobs:
-  build-and-push:
+  security-scan:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,47 +16,50 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@master
 
-      - name: Get changed files
-        id: files
-        uses: jitterbit/get-changed-files@v1
-
-      - name: Build and push Docker images
+      - name: Run Trivy scans for all directories
         run: |
-          changed_dirs=()
-
-          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
-              dir=$(dirname "$added_modified_file")
-              changed_dirs+=("$dir")
-            fi
+          # Tüm Dockerfile'ların bulunduğu klasörleri bul
+          find . -name 'Dockerfile' | while read dockerfile; do
+            dir=$(dirname "$dockerfile")  # Dockerfile'ın bulunduğu dizini bul
+            echo "Running Trivy scan for $dir..."
+            
+            # Her klasör için Trivy taramasını çalıştır ve JSON formatında raporu kaydet
+            trivy fs --format json -o "$dir/trivy-report.json" "$dir"
           done
 
-          changed_dirs=($(echo "${changed_dirs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+      - name: Parse all Trivy reports and create or update issue
+        run: |
+          issue_title="Security Vulnerabilities Report"
 
-          for dir in "${changed_dirs[@]}"; do
-            dockerfile="$dir/Dockerfile"
-            base_dir=$(echo $dir | cut -d'/' -f1)
-            sub_dir=$(basename $dir)
+          # Mevcut bir issue başlığı olup olmadığını kontrol et
+          existing_issue=$(gh issue list --repo ${{ github.repository }} --search "$issue_title" --json title --jq '.[0].title')
 
-            if [ "$base_dir" = "wolfios-base" ]; then
-              image_name="tn-wolfios"
-            else
-              if [ "$base_dir" = "3rd-party" ]; then
-                image_name="$sub_dir"
-              else
-                image_name="$sub_dir-$base_dir"
-              fi
+          if [ "$existing_issue" = "$issue_title" ]; then
+            # Eğer issue başlığı mevcutsa, mevcut issue'ya yorum ekle
+            issue_number=$(gh issue list --repo ${{ github.repository }} --search "$issue_title" --json number --jq '.[0].number')
+          else
+            # Eğer issue yoksa, yeni bir issue oluştur
+            issue_number=$(gh issue create --title "$issue_title" --label "security" --body "New security vulnerabilities found. See the details below:" --json number --jq '.number')
+          fi
+
+          # Tüm tarama sonuçlarını işle ve mevcut issue'ya yorum ekle
+          find . -name 'trivy-report.json' | while read report; do
+            jq '.[] | select(.Vulnerabilities != null) | .Vulnerabilities[]' "$report" > vulnerabilities.json
+            if [ -s vulnerabilities.json ]; then  # Eğer dosya boş değilse, bir yorum ekle
+              for row in $(cat vulnerabilities.json | jq -r '. | @base64'); do
+                _jq() {
+                  echo ${row} | base64 --decode | jq -r ${1}
+                }
+                TITLE="$(_jq '.Title')"
+                DESCRIPTION="$(_jq '.Description')"
+                SEVERITY="$(_jq '.Severity')"
+                CVE="$(_jq '.CVE')"
+
+                # Mevcut issue'ya her yeni güvenlik açığı için yorum ekle
+                gh issue comment $issue_number --body "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE"
+              done
             fi
-
-            version=$(cat $dir/version)
-
-            full_tag=turknethub/$image_name:$version-${{ github.run_number }}
-
-            docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $dir --push
           done
