@@ -1,0 +1,55 @@
+name: Security Scan and Issue Creation
+
+on:
+  schedule:
+    - cron: "0 0,6,12,18 * * *"
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Find all Dockerfiles and run Trivy scan
+        run: |
+          find . -name 'Dockerfile' > dockerfiles.txt
+          while read dockerfile; do
+            dir=$(dirname "$dockerfile")
+            trivy image --format json -o "$dir/trivy-report.json" -f "$dockerfile"
+          done < dockerfiles.txt
+
+      - name: Parse all Trivy reports and create or update issue
+        run: |
+          issue_title="Security Vulnerabilities Report"
+
+          # Mevcut bir issue başlığı olup olmadığını kontrol et
+          existing_issue=$(gh issue list --repo ${{ github.repository }} --search "$issue_title" --json title --jq '.[0].title')
+
+          if [ "$existing_issue" = "$issue_title" ]; then
+            # Eğer issue başlığı mevcutsa, mevcut issue'ya yorum ekle
+            issue_number=$(gh issue list --repo ${{ github.repository }} --search "$issue_title" --json number --jq '.[0].number')
+          else
+            # Eğer issue yoksa, yeni bir issue oluştur
+            issue_number=$(gh issue create --title "$issue_title" --label "security" --body "New security vulnerabilities found. See the details below:" --json number --jq '.number')
+          fi
+
+          # Tüm tarama sonuçlarını işle ve mevcut issue'ya yorum ekle
+          find . -name 'trivy-report.json' | while read report; do
+            jq '.[] | select(.Vulnerabilities != null) | .Vulnerabilities[]' "$report" > vulnerabilities.json
+            if [ -s vulnerabilities.json ]; then  # Eğer dosya boş değilse, bir yorum ekle
+              for row in $(cat vulnerabilities.json | jq -r '. | @base64'); do
+                _jq() {
+                  echo ${row} | base64 --decode | jq -r ${1}
+                }
+                TITLE="$(_jq '.Title')"
+                DESCRIPTION="$(_jq '.Description')"
+                SEVERITY="$(_jq '.Severity')"
+                CVE="$(_jq '.CVE')"
+
+                # Mevcut issue'ya her yeni güvenlik açığı için yorum ekle
+                gh issue comment $issue_number --body "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE"
+              done
+            fi
+          done
