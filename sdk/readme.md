@@ -23,6 +23,8 @@ docker buildx build --platform=linux/amd64,linux/arm64  --tag turknethub/tn-wolf
 
 [dotnet LTS](https://dotnet.microsoft.com/en-us/download/dotnet)
 
+[dotnet-install-script](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script)
+
 * **dotnet3**
 
 ```bash

@@ -49,6 +49,8 @@ https://www.cncf.io/blog/2022/03/30/trusting-sboms-in-the-software-supply-chain-
 
 ### DotNet
 
+[dotnet-install-script](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script)
+
 * dotnet3
 
 ```bash
