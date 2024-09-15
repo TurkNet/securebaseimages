@@ -56,20 +56,18 @@ jobs:
           find . -name 'trivy-report.json' | while read report; do
             dir=$(dirname "$report")
             
-            jq '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[]' "$report" > vulnerabilities.json
+            jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[]' "$report" > vulnerabilities.json
             
             if [ -s vulnerabilities.json ]; then
-              for row in $(cat vulnerabilities.json | jq -r '. | @base64'); do
-                _jq() {
-                  echo ${row} | base64 --decode | jq -r ${1}
-                }
-                TITLE="$(_jq '.Title')"
-                DESCRIPTION="$(_jq '.Description')"
-                SEVERITY="$(_jq '.Severity')"
-                CVE="$(_jq '.CVE')"
-                echo "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE\n- Directory: $dir"
-                gh issue comment $issue_number --body "**$TITLE**\n- Severity: $SEVERITY\n- Description: $DESCRIPTION\n- CVE: $CVE\n- Directory: $dir"
+              echo "Vulnerabilities found in $dir:"
+              echo "| Library        | Vulnerability   | Severity   | Status  | Installed Version | Fixed Version  | Title  |"
+              echo "|----------------|-----------------|------------|---------|-------------------|----------------|--------|"
+
+              cat vulnerabilities.json | jq -r '. | "\(.PkgName) | \(.VulnerabilityID) | \(.Severity) | \(.Status // "unknown") | \(.InstalledVersion) | \(.FixedVersion // "N/A") | \(.Title)"' | while read vulnerability; do
+                echo "| $vulnerability |"
               done
+
+              gh issue comment $issue_number --body "$(echo -e "$vulnerability")"
             else
               echo "No vulnerabilities found in $dir"
             fi
