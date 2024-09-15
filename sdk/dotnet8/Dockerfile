@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.4-24
+FROM turknethub/tn-wolfios:0.0.4-27
 
 COPY version /tmp/version
 
