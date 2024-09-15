@@ -26,8 +26,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install wget -y
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.41.0/trivy_0.41.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.41.0_Linux-64bit.deb
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.55.1/trivy_0.55.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.55.1_Linux-64bit.deb
+          trivy image --download-db-only
 
       - name: Build Docker images for all directories and run Trivy scan
         run: |
