@@ -62,12 +62,14 @@ jobs:
             if [ -s vulnerabilities.json ]; then
               echo "Vulnerabilities found in $dir:"
 
-              vulnerability_table="| Library        | Vulnerability   | Severity   | Status  | Installed Version | Fixed Version  | Title  |\n"
-              vulnerability_table+="|----------------|-----------------|------------|---------|-------------------|----------------|--------|\n"
+              vulnerability_table="| Library        | Vulnerability   | Severity   | Status  | Installed Version | Fixed Version  | Title  | \n"
+              vulnerability_table+="|----------------|-----------------|------------|---------|-------------------|----------------|--------| \n"
 
               while IFS= read -r vulnerability; do
-                vulnerability_table+="| $vulnerability |\n"
+                vulnerability_table+="| $vulnerability | \n"
               done < <(cat vulnerabilities.json | jq -r '. | "\(.PkgName) | \(.VulnerabilityID) | \(.Severity) | \(.Status // "unknown") | \(.InstalledVersion) | \(.FixedVersion // "N/A") | \(.Title)"')
+
+              vulnerability_table=$(echo -e "$vulnerability_table")
 
               # GitHub issue'ya tabloyu yorum olarak ekle
               gh issue comment $issue_number --body "$vulnerability_table"
