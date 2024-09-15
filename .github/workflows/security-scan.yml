@@ -62,7 +62,8 @@ jobs:
             if [ -s vulnerabilities.json ]; then
               echo "Vulnerabilities found in $dir:"
 
-              vulnerability_table="| Library        | Vulnerability   | Severity   | Status  | Installed Version | Fixed Version  | Title  | \n"
+              vulnerability_table="**Directory**: $dir \n \n"
+              vulnerability_table+="| Library        | Vulnerability   | Severity   | Status  | Installed Version | Fixed Version  | Title  | \n"
               vulnerability_table+="|----------------|-----------------|------------|---------|-------------------|----------------|--------| \n"
 
               while IFS= read -r vulnerability; do
@@ -71,7 +72,6 @@ jobs:
 
               vulnerability_table=$(echo -e "$vulnerability_table")
 
-              # GitHub issue'ya tabloyu yorum olarak ekle
               gh issue comment $issue_number --body "$vulnerability_table"
             else
               echo "No vulnerabilities found in $dir"
