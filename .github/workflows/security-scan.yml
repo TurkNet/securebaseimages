@@ -50,7 +50,8 @@ jobs:
           existing_issue=$(gh issue list --label security --state open --limit 1 --json number --jq '.[0].number')
 
           if [ -z "$existing_issue" ]; then
-            issue_number=$(gh issue create --title "$issue_title" --label "security" --body "New security vulnerabilities found. See the details below." | grep -oP '(?<=https://github.com/.*/issues/)\d+')
+            issue_url=$(gh issue create --title "$issue_title" --label "security" --body "New security vulnerabilities found. See the details below.")
+            issue_number=$(echo "$issue_url" | cut -d'/' -f 7)  # Issue URL'den numara ayıkla
           else
             issue_number="$existing_issue"
           fi
