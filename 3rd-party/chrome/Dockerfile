@@ -17,7 +17,7 @@ RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/so
 
 # Update the package list and install chrome
 RUN apt update -y
-RUN apt install -y google-chrome-stable=$(cat /tmp/version) libgconf-2-4=3.2.6-7ubuntu2
+RUN apt install -y google-chrome-stable libgconf-2-4=3.2.6-7ubuntu2
 
 # Set up Chromedriver Environment variables
 ENV CHROMEDRIVER_VERSION 128.0.6613.137
@@ -37,9 +37,5 @@ maven=3.6.3-5
 ENV PATH $CHROMEDRIVER_DIR:$PATH
 
 RUN rm -rf /var/lib/apt/lists/*
-
-RUN wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O /usr/bin/allurectl
-RUN chmod +x /usr/bin/allurectl
-
 
 ENTRYPOINT [ "sleep", "infinity" ]
