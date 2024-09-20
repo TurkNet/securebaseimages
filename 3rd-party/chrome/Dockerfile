@@ -38,4 +38,8 @@ ENV PATH $CHROMEDRIVER_DIR:$PATH
 
 RUN rm -rf /var/lib/apt/lists/*
 
+RUN wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O /usr/bin/allurectl
+RUN chmod +x /usr/bin/allurectl
+
+
 ENTRYPOINT [ "sleep", "infinity" ]
