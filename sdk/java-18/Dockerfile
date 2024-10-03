@@ -6,6 +6,4 @@ RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-18-default-jdk=$(cat /tmp/v
 
 ENV PATH="/usr/lib/jvm/java-18-openjdk/bin:$PATH"
 
-ENV PATH="/usr/lib/jvm/java-11-openjdk/bin:$PATH"
-
 CMD ["tail", "-f", "/dev/null"]
