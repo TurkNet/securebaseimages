@@ -25,6 +25,7 @@ tzdata=2024a-r3 \
 wget=1.24.5-r4 \
 zlib-dev=1.3.1-r4
 
+
 RUN adduser -D -u 1000 -g 0 appuser
 RUN chown -R appuser:0 /home/appuser && chmod -R g=u /home/appuser
 RUN cp /usr/share/zoneinfo/Turkey /etc/localtime
