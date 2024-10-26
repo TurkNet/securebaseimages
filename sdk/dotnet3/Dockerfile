@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.4-53 AS newrelic
+FROM turknethub/tn-wolfios:0.0.4-56 AS newrelic
 
 ARG TARGETARCH
 ARG NewRelicVersion=10.29.0

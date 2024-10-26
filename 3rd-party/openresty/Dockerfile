@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.4-53 AS build
+FROM turknethub/tn-wolfios:0.0.4-56 AS build
 
 RUN apk update && apk add --no-cache \
 build-base=1-r8 \
