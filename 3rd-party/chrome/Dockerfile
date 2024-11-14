@@ -32,7 +32,7 @@ RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
 
 # install java dependecies
 RUN apt install -y \
-openjdk-11-jre=11.0.24+8-1ubuntu3~22.04 \
+openjdk-11-jre \
 maven=3.6.3-5
 
 # Put Chromedriver into the PATH
