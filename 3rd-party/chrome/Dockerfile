@@ -9,7 +9,9 @@ RUN apt update && apt clean
 RUN apt install -y \
 wget=1.21.2-2ubuntu1.1 \
 unzip=6.0-26ubuntu3.2 \
-gnupg=2.2.27-3ubuntu2.1
+gnupg=2.2.27-3ubuntu2.1 \
+curl \
+net-tools
 
 # Set up the Chrome PPA
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
