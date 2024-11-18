@@ -23,7 +23,8 @@ openssl-doc=3.3.2-r2 \
 openssl=3.3.2-r2 \
 tzdata=2024a-r3 \
 wget=1.24.5-r4 \
-zlib-dev=1.3.1-r4
+zlib-dev=1.3.1-r4 \
+envsubst=0.1-r1
 
 
 RUN adduser -D -u 1000 -g 0 appuser
