@@ -32,7 +32,7 @@ WORKDIR /dotnet
 # Enable globalization and time zones:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
 ENV \
-    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
 RUN apk add --no-cache \
