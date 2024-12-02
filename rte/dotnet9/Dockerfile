@@ -1,6 +1,5 @@
 FROM turknethub/tn-wolfios:0.0.4-70 AS newrelic
 
-ARG TARGETARCH
 ARG NewRelicVersion=10.29.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
 ARG NEWRELICKEY=""
@@ -13,7 +12,7 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=true \
     NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED=true
 
-ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
+ARG NewRelicFile=newrelic-dotnet-agent_amd64.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
 RUN mkdir "${NewRelicHome}" && \
