@@ -2,6 +2,14 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
+    curl \
+    apt-transport-https \
+    software-properties-common && \
+    rm -rf /var/lib/apt/lists/*
+
 ARG NewRelicVersion=10.29.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
 ARG NEWRELICKEY=""
@@ -14,19 +22,11 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=true \
     NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED=true
 
-ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
+ARG NewRelicFile=newrelic-dotnet-agent_amd64.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
 RUN mkdir "${NewRelicHome}" && \
     cd /usr/local && wget -O - "${NewRelicUrl}" | gzip -dc | tar xf -
-
-RUN apt-get update && \
-    apt-get install -y \
-    wget \
-    curl \
-    apt-transport-https \
-    software-properties-common && \
-    rm -rf /var/lib/apt/lists/*
 
 RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
