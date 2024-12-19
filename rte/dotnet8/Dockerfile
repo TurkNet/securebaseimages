@@ -29,3 +29,4 @@ RUN apk update && apk add --no-cache dotnet-8=$(cat /tmp/version) dotnet-8-runti
 
 CMD ["tail", "-f", "/dev/null"]
 
+
