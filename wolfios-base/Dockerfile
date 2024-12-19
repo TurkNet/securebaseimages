@@ -5,7 +5,7 @@ RUN apk update
 RUN apk add --no-cache \
 bash=5.2.32-r2 \
 busybox=1.36.1-r10 \
-curl=8.10.0-r0 \
+curl=8.11.1-r0 \
 dumb-init=1.2.5-r3 \
 glibc-locale-en=2.40-r1 \
 icu-dev=75.1-r2 \
