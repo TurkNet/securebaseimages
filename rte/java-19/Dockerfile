@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.4-64 AS newrelic
+FROM turknethub/tn-wolfios:0.0.4-78 AS newrelic
 
 ARG NewRelicVersion=8.14.0
 ARG NewRelicHome=/usr/local/tomcat/newrelic

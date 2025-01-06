@@ -1,6 +1,6 @@
 # Docker
 
-docker buildx build --platform=linux/amd64,linux/arm64  --tag turknethub/tn-wolfios:0.0.4-70 -f ./Dockerfile . --push
+docker buildx build --platform=linux/amd64,linux/arm64  --tag turknethub/tn-wolfios:0.0.4-78 -f ./Dockerfile . --push
 
 ## Vulnerability
 
