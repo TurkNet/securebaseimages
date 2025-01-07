@@ -5,7 +5,6 @@ ARG NewRelicHome=/usr/local/tomcat/newrelic
 ARG NEWRELICKEY=""
 ENV CORECLR_NEWRELIC_HOME=$NewRelicHome \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY \
-    NEW_RELIC_LOG_FILE_NAME=STDOUT \
     JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -javaagent:${NewRelicHome}/newrelic-agent-$NewRelicVersion.jar"
 
 ARG NewRelicFile=newrelic-agent-${NewRelicVersion}.jar
