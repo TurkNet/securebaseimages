@@ -12,6 +12,7 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
+    
 
 ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile

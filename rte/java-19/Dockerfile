@@ -7,6 +7,7 @@ ENV CORECLR_NEWRELIC_HOME=$NewRelicHome \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY \
     JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -javaagent:${NewRelicHome}/newrelic-agent-$NewRelicVersion.jar"
 
+    
 ARG NewRelicFile=newrelic-agent-${NewRelicVersion}.jar
 ARG NewRelicUrl=https://download.newrelic.com/newrelic/java-agent/newrelic-agent/$NewRelicVersion/$NewRelicFile
 

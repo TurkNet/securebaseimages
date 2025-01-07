@@ -5,6 +5,7 @@ ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \
     NEW_RELIC_NO_CONFIG_FILE=false \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY 
 
+    
 COPY version /tmp/version
 
 RUN apk update && apk add --no-cache icu=74.2-r2 icu-dev=74.2-r2 && \
