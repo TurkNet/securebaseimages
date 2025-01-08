@@ -16,7 +16,6 @@ ENV CORECLR_ENABLE_PROFILING=1 \
 ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
-
 RUN mkdir "${NewRelicHome}" && \
     cd /usr/local && wget -O - "${NewRelicUrl}" | gzip -dc | tar xf -
 
@@ -46,6 +45,5 @@ RUN echo "Installing dotnet SDK Version = $(cat /tmp/version)" && \
 ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --architecture ${TARGETARCH}
 
 RUN rm -f ./dotnet-install.sh
-
 
 CMD ["tail", "-f", "/dev/null"]

@@ -10,6 +10,7 @@ RUN apt-get update && \
     software-properties-common && \
     rm -rf /var/lib/apt/lists/*
 
+
 ARG NewRelicVersion=10.29.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
 ARG NEWRELICKEY=""

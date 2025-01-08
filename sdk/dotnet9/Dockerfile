@@ -19,7 +19,6 @@ RUN apk add --no-cache \
     icu-data-full \
     icu-libs
 
-    
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
 chmod +x ./dotnet-install.sh
 

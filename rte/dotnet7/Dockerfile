@@ -13,7 +13,6 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
     
-
 ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
@@ -29,4 +28,3 @@ COPY version /tmp/version
 RUN apk update && apk add --no-cache dotnet-7=$(cat /tmp/version) dotnet-7-runtime=$(cat /tmp/version) aspnet-7-runtime=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
-

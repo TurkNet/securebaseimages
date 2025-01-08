@@ -13,7 +13,6 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
     
-
 ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
@@ -43,11 +42,10 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
 chmod +x ./dotnet-install.sh
 
 RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet  --architecture ${TARGETARCH}
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
 RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore  --architecture ${TARGETARCH}
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
 
 RUN rm -f ./dotnet-install.sh
-
 
 CMD ["tail", "-f", "/dev/null"]

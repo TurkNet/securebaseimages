@@ -13,10 +13,8 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
     
-
 ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
-
 
 RUN mkdir "${NewRelicHome}" && \
     cd /usr/local && wget -O - "${NewRelicUrl}" | gzip -dc | tar xf -
@@ -28,5 +26,3 @@ COPY version /tmp/version
 RUN apk update && apk add --no-cache dotnet-8=$(cat /tmp/version) dotnet-8-runtime=$(cat /tmp/version) aspnet-8-runtime=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
-
-
