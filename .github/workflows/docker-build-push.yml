@@ -1,9 +1,20 @@
 name: Build and Push Docker Images
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Build platformları (comma ile ayırın, örn: linux/amd64,linux/arm64)'
+        required: true
+        default: 'linux/amd64,linux/arm64'
+      image_prefix:
+        description: 'Docker image prefix'
+        required: true
+        default: 'turknethub'
+      build_all:
+        description: 'Tüm Dockerfile''ları build et'
+        type: boolean
+        default: false
 
 jobs:
   build-and-push:
@@ -28,14 +39,19 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          changed_dirs=()
-
-          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
-              dir=$(dirname "$added_modified_file")
-              changed_dirs+=("$dir")
-            fi
-          done
+          if [ "${{ github.event.inputs.build_all }}" = "true" ]; then
+            # Tüm Dockerfile'ları bul
+            changed_dirs=($(find . -name "Dockerfile" -exec dirname {} \;))
+          else
+            # Sadece değişen dosyaları kontrol et
+            changed_dirs=()
+            for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
+              if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
+                dir=$(dirname "$added_modified_file")
+                changed_dirs+=("$dir")
+              fi
+            done
+          fi
 
           changed_dirs=($(echo "${changed_dirs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
@@ -56,7 +72,7 @@ jobs:
 
             version=$(cat $dir/version)
 
-            full_tag=turknethub/$image_name:$version-${{ github.run_number }}
+            full_tag=${{ github.event.inputs.image_prefix }}/$image_name:$version-${{ github.run_number }}
 
-            docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $dir --push
+            docker buildx build --platform=${{ github.event.inputs.platforms }} --tag $full_tag -f $dockerfile $dir --push
           done
