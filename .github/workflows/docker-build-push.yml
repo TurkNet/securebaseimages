@@ -11,6 +11,10 @@ on:
         description: 'Docker image prefix'
         required: true
         default: 'turknethub'
+      versions:
+        description: 'Build edilecek versiyonlar (comma ile ayırın, örn: dotnet7,java-20,nodejs-22)'
+        required: true
+        default: 'dotnet7'
       build_all:
         description: 'Tüm Dockerfile''ları build et'
         type: boolean
@@ -39,16 +43,21 @@ jobs:
 
       - name: Build and push Docker images
         run: |
+          # Versions input'unu diziye çevir
+          IFS=',' read -ra BUILD_VERSIONS <<< "${{ github.event.inputs.versions }}"
+          
           if [ "${{ github.event.inputs.build_all }}" = "true" ]; then
             # Tüm Dockerfile'ları bul
             changed_dirs=($(find . -name "Dockerfile" -exec dirname {} \;))
           else
-            # Sadece değişen dosyaları kontrol et
+            # Sadece seçilen versiyonlar için dizinleri hazırla
             changed_dirs=()
-            for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-              if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
-                dir=$(dirname "$added_modified_file")
-                changed_dirs+=("$dir")
+            for version in "${BUILD_VERSIONS[@]}"; do
+              if [ -d "sdk/$version" ]; then
+                changed_dirs+=("sdk/$version")
+              fi
+              if [ -d "rte/$version" ]; then
+                changed_dirs+=("rte/$version")
               fi
             done
           fi
@@ -57,22 +66,24 @@ jobs:
 
           for dir in "${changed_dirs[@]}"; do
             dockerfile="$dir/Dockerfile"
-            base_dir=$(echo $dir | cut -d'/' -f1)
-            sub_dir=$(basename $dir)
+            if [ ! -f "$dockerfile" ]; then
+              echo "Dockerfile bulunamadı: $dockerfile"
+              continue
+            fi
 
-            if [ "$base_dir" = "wolfios-base" ]; then
-              image_name="tn-wolfios"
+            base_dir=$(echo $dir | cut -d'/' -f1)  # sdk veya rte
+            version_dir=$(basename $dir)           # örn: dotnet7, java-20
+            
+            # Image adını oluştur
+            if [ "$base_dir" = "sdk" ]; then
+              image_name="$version_dir-sdk"
             else
-              if [ "$base_dir" = "3rd-party" ]; then
-                image_name="$sub_dir"
-              else
-                image_name="$sub_dir-$base_dir"
-              fi
+              image_name="$version_dir-runtime"
             fi
 
             version=$(cat $dir/version)
-
             full_tag=${{ github.event.inputs.image_prefix }}/$image_name:$version-${{ github.run_number }}
 
+            echo "Building $full_tag from $dockerfile..."
             docker buildx build --platform=${{ github.event.inputs.platforms }} --tag $full_tag -f $dockerfile $dir --push
           done
