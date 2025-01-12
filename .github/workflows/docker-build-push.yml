@@ -2,29 +2,8 @@ name: Build and Push Docker Images
 
 on:
   push:
-    paths:
-      - 'sdk/**/Dockerfile'
-      - 'sdk/**/version'
-      - 'rte/**/Dockerfile'
-      - 'rte/**/version'
-  workflow_dispatch:
-    inputs:
-      platforms:
-        description: 'Build platformları (comma ile ayırın, örn: linux/amd64,linux/arm64)'
-        required: true
-        default: 'linux/amd64,linux/arm64'
-      image_prefix:
-        description: 'Docker image prefix'
-        required: true
-        default: 'turknethub'
-      versions:
-        description: 'Build edilecek versiyonlar (comma ile ayırın, örn: dotnet7,java-20,nodejs-22)'
-        required: true
-        default: 'dotnet7'
-      build_all:
-        description: 'Tüm Dockerfile''ları build et'
-        type: boolean
-        default: false
+    branches:
+      - main
 
 jobs:
   build-and-push:
@@ -33,8 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -45,71 +22,41 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Get changed directories
-        id: changed-dirs
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # Manuel tetikleme için versions input'unu kullan
-            changed_dirs=()
-            IFS=',' read -ra BUILD_VERSIONS <<< "${{ github.event.inputs.versions }}"
-            
-            if [ "${{ github.event.inputs.build_all }}" = "true" ]; then
-              changed_dirs=($(find . -name "Dockerfile" -exec dirname {} \;))
-            else
-              for version in "${BUILD_VERSIONS[@]}"; do
-                if [ -d "sdk/$version" ]; then
-                  changed_dirs+=("sdk/$version")
-                fi
-                if [ -d "rte/$version" ]; then
-                  changed_dirs+=("rte/$version")
-                fi
-              done
-            fi
-          else
-            # Push event için değişen dosyaları kontrol et
-            changed_files=$(git diff --name-only HEAD^ HEAD)
-            changed_dirs=()
-            
-            while IFS= read -r file; do
-              if [[ "$file" == *"Dockerfile"* ]] || [[ "$file" == *"version"* ]]; then
-                dir=$(dirname "$file")
-                if [[ ! " ${changed_dirs[@]} " =~ " ${dir} " ]]; then
-                  changed_dirs+=("$dir")
-                fi
-              fi
-            done <<< "$changed_files"
-          fi
-          
-          # Dizinleri çıktı olarak ayarla
-          echo "dirs=${changed_dirs[*]}" >> $GITHUB_OUTPUT
+      - name: Get changed files
+        id: files
+        uses: jitterbit/get-changed-files@v1
 
       - name: Build and push Docker images
         run: |
-          # Değişen dizinleri al
-          IFS=' ' read -ra changed_dirs <<< "${{ steps.changed-dirs.outputs.dirs }}"
+          changed_dirs=()
+
+          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
+            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
+              dir=$(dirname "$added_modified_file")
+              changed_dirs+=("$dir")
+            fi
+          done
+
+          changed_dirs=($(echo "${changed_dirs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
           for dir in "${changed_dirs[@]}"; do
             dockerfile="$dir/Dockerfile"
-            if [ ! -f "$dockerfile" ]; then
-              echo "Dockerfile bulunamadı: $dockerfile"
-              continue
-            fi
+            base_dir=$(echo $dir | cut -d'/' -f1)
+            sub_dir=$(basename $dir)
 
-            base_dir=$(echo $dir | cut -d'/' -f1)  # sdk veya rte
-            version_dir=$(basename $dir)           # örn: dotnet7, java-20
-            
-            # Image adını oluştur
-            if [ "$base_dir" = "sdk" ]; then
-              image_name="$version_dir-sdk"
+            if [ "$base_dir" = "wolfios-base" ]; then
+              image_name="tn-wolfios"
             else
-              image_name="$version_dir-runtime"
+              if [ "$base_dir" = "3rd-party" ]; then
+                image_name="$sub_dir"
+              else
+                image_name="$sub_dir-$base_dir"
+              fi
             fi
 
             version=$(cat $dir/version)
-            full_tag=${{ github.event.inputs.image_prefix || 'turknethub' }}/$image_name:$version-${{ github.run_number }}
 
-            echo "Building $full_tag from $dockerfile..."
-            docker buildx build --platform=${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }} \
-              --tag $full_tag \
-              -f $dockerfile $dir --push
+            full_tag=turknethub/$image_name:$version-${{ github.run_number }}
+
+            docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $dir --push
           done
