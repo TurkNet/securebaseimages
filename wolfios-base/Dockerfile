@@ -32,6 +32,7 @@ RUN mkdir -p /app/data
 RUN chmod -R 755 /app
 RUN chown -R appuser:0 /app
 
+
 #RUN cp /usr/share/zoneinfo/Turkey /etc/localtime
 
 # TODO: Critic zaafiyet var diye commentlendi.
