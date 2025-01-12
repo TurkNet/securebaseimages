@@ -28,6 +28,9 @@ gettext=0.22.5-r1
 
 RUN adduser -D -u 1000 -g 0 appuser
 RUN chown -R appuser:0 /home/appuser && chmod -R g=u /home/appuser
+RUN mkdir -p /app/data
+RUN chmod -R 755 /app/data
+RUN chown -R appuser:0 /app/data
 
 #RUN cp /usr/share/zoneinfo/Turkey /etc/localtime
 
