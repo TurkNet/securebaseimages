@@ -3,29 +3,29 @@ FROM cgr.dev/chainguard/wolfi-base:latest
 RUN apk update
 
 RUN apk add --no-cache \
-bash=5.2.32-r2 \
-busybox=1.36.1-r10 \
-curl=8.11.1-r0 \
-dumb-init=1.2.5-r3 \
-glibc-locale-en=2.40-r1 \
-icu-dev=75.1-r2 \
-libssl3=3.3.3-r0 \
-libstdc++=14.2.0-r1 \
-libunwind-dev=1.8.1-r1 \
-libuuid=2.40.2-r0 \
-ncurses-dev=6.5_p20240629-r0 \
+bash=5.2.37-r30 \
+busybox=1.37.0-r30 \
+curl=8.12.1-r0 \
+dumb-init=1.2.5-r5 \
+glibc-locale-en=2.40-r23 \
+icu-dev=75.1-r8 \
+libstdc++=14.2.0-r11 \
+libunwind-dev=1.8.1-r2 \
+libuuid=2.41-r0 \
+ncurses-dev=6.5_p20241228-r1 \
 # TODO: Critic zaafiyet var diye commentlendi.
 # CRITICAL CVE-2024-5535
 # https://scout.docker.com/v/CVE-2024-5535
 # openssl-config=3.3.0-r5 \
-openssl-dev=3.3.3-r0 \
-openssl-doc=3.3.3-r0 \
-openssl=3.3.3-r0 \
-tzdata=2024a-r3 \
-wget=1.24.5-r4 \
-zlib-dev=1.3.1-r4 \
+openssl-dev=3.4.1-r2 \
+openssl-doc=3.4.1-r2 \
+openssl=3.4.1-r2 \
+tzdata=2025b-r0 \
+wget=1.25.0-r1 \
+zlib-dev=1.3.1-r6 \
 gettext=0.22.5-r1 \
-libcrypto3=3.3.3-r0
+libcrypto3=3.4.1-r2 \
+libssl3=3.4.1-r2
 
 RUN adduser -D -u 1000 -g 0 appuser
 RUN chown -R appuser:0 /home/appuser && chmod -R g=u /home/appuser
