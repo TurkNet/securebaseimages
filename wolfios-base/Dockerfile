@@ -18,9 +18,9 @@ ncurses-dev=6.5_p20240629-r0 \
 # CRITICAL CVE-2024-5535
 # https://scout.docker.com/v/CVE-2024-5535
 # openssl-config=3.3.0-r5 \
-openssl-dev=3.3.2-r2 \
-openssl-doc=3.3.2-r2 \
-openssl=3.3.2-r2 \
+openssl-dev=3.4.1-r0 \
+openssl-doc=3.4.1-r0 \
+openssl=3.4.1-r0 \
 tzdata=2024a-r3 \
 wget=1.24.5-r4 \
 zlib-dev=1.3.1-r4 \
