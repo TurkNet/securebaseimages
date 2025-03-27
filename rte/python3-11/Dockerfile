@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.4-78
+FROM turknethub/tn-wolfios:0.0.4-98
 
 ARG NEWRELICKEY=""
 ENV NEW_RELIC_LICENSE_KEY=$NEWRELICKEY
