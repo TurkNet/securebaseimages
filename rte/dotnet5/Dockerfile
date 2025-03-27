@@ -1,15 +1,4 @@
-FROM ubuntu:20.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && \
-    apt-get install -y \
-    wget \
-    curl \
-    apt-transport-https \
-    software-properties-common && \
-    rm -rf /var/lib/apt/lists/*
-
+FROM turknethub/tn-wolfios:0.0.4-98 AS newrelic
 
 ARG NewRelicVersion=10.29.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
@@ -21,22 +10,43 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY \
     NEW_RELIC_APPLICATION_LOGGING_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
-    NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
+    NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED=false
 
+    
 ARG NewRelicFile=newrelic-dotnet-agent_amd64.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
 RUN mkdir "${NewRelicHome}" && \
     cd /usr/local && wget -O - "${NewRelicUrl}" | gzip -dc | tar xf -
 
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb
+FROM newrelic AS dotnetrte
 
-RUN apt-get update && \
-    apt-get install -y aspnetcore-runtime-5.0 && \
-    rm -rf /var/lib/apt/lists/*
+COPY version /tmp/version
 
-WORKDIR /app
+RUN mkdir /dotnet
+ENV PATH /dotnet:$PATH
 
-CMD ["dotnet", "--version"]
+WORKDIR /dotnet
+
+# Enable globalization and time zones:
+# https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
+ENV \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
+RUN apk add --no-cache \
+    icu-data-full \
+    icu-libs
+
+RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+chmod +x ./dotnet-install.sh
+
+RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
+RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
+
+RUN rm -f ./dotnet-install.sh
+
+
+CMD ["tail", "-f", "/dev/null"]
