@@ -4,7 +4,7 @@ RUN apk update && apk add --no-cache \
     ca-certificates \
     dotnet-9 \
     dotnet-9-sdk \
-    openjdk-17-jre=17.0.14-r2 \
+    openjdk-17-jre=17.0.14-r3 \
     maven-3.8=3.8.8-r0 \
     npm=10.8.2-r0 \
     yarn=1.22.22-r1 \
@@ -28,12 +28,15 @@ RUN dotnet tool install --global dotnet-sonarscanner
 RUN dotnet tool install --global dotnet-reportgenerator-globaltool
 RUN dotnet tool install --global coverlet.console
 
-RUN curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-7.0.2.4839-linux-aarch64.zip && \
+RUN curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-7.0.2.4839-linux-x64.zip && \
     unzip sonar-scanner.zip -d /opt && \
-    mv /opt/sonar-scanner-7.0.2.4839-linux-aarch64 /opt/sonar-scanner && \
+    mv /opt/sonar-scanner-7.0.2.4839-linux-x64 /opt/sonar-scanner && \
     rm sonar-scanner.zip && \
     mkdir /usr/local/bin/ && \
     ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+RUN rm -f /opt/sonar-scanner/jre/bin/java && \
+    ln -s /usr/lib/jvm/java-17-openjdk/bin/java /opt/sonar-scanner/jre/bin/java
 
 ENV PATH="$PATH:/root/.dotnet/tools:/usr/lib/jvm/java-17-openjdk/bin"
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
