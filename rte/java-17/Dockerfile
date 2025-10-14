@@ -17,7 +17,7 @@ FROM newrelic AS rte
 
 COPY version /tmp/version
 
-RUN apk update && apk add maven-4.0=4.0.0-rc-4 openjdk-17-jre=$(cat /tmp/version)
+RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-17-jre=$(cat /tmp/version)
 
 ENV PATH="/usr/lib/jvm/java-17-openjdk/bin:$PATH"
 
