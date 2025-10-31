@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.5-114
+FROM turknethub/tn-wolfios:10.46.0
 
 ARG NEWRELICKEY=""
 ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \
