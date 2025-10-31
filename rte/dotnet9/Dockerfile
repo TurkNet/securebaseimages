@@ -1,6 +1,6 @@
 FROM turknethub/tn-wolfios:0.0.5-114 AS newrelic
 
-ARG NewRelicVersion=10.29.0
+ARG NewRelicVersion=10.46.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
 ARG NEWRELICKEY=""
 ENV CORECLR_ENABLE_PROFILING=1 \
