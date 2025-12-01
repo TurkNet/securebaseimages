@@ -19,7 +19,7 @@ RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/so
 
 # Update the package list and install chrome
 RUN apt update -y
-RUN apt install -y google-chrome-stable libgconf-2-4=3.2.6-7ubuntu2
+RUN apt install -y google-chrome-stable libgconf-2-4
 
 # Set up Chromedriver Environment variables
 ENV CHROMEDRIVER_VERSION 128.0.6613.137
