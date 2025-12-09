@@ -15,7 +15,7 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     OTEL_DOTNET_AUTO_HOME="/otel-dotnet-auto" \
     DOTNET_STARTUP_HOOKS="/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
 
-ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces \
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4317 \
     OTEL_TRACES_EXPORTER=otlp \
     OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
     OTEL_DOTNET_AUTO_LOG_DIRECTORY=/tmp/otel-dotnet-auto-logs \
