@@ -3,10 +3,12 @@ FROM turknethub/tn-wolfios:0.0.5-114 AS otel
 # Bağımlılıklar
 RUN apk add --no-cache curl bash icu-data-full icu-libs
 
-# OpenTelemetry .NET Auto Instrumentation kurulumu
+# OpenTelemetry .NET Auto Instrumentation
 RUN curl -sSfL https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh -O \
     && chmod +x otel-dotnet-auto-install.sh \
     && sh ./otel-dotnet-auto-install.sh
+
+RUN chmod -R a+rX /otel-dotnet-auto
 
 # OTEL PATH
 ENV OTEL_DOTNET_AUTO_HOME="/otel-dotnet-auto"
