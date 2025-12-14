@@ -6,8 +6,10 @@ RUN apk add --no-cache \
     icu-data-full \
     icu-libs
 
+# Kurulum pathi
 ENV OTEL_DOTNET_AUTO_HOME=/otel-dotnet-auto
 
+# OpenTelemetry .NET Auto Instrumentation kurulumu
 RUN curl -sSfL \
     https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh \
     -O \
