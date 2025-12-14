@@ -4,8 +4,9 @@ RUN apk add --no-cache \
     curl \
     bash \
     icu-data-full \
-    icu-libs
-
+    icu-libs \
+    libc6-compat
+    
 ENV OTEL_DOTNET_AUTO_HOME=/usr/local/otel-dotnet-auto
 
 RUN curl -sSfL \
