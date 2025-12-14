@@ -5,7 +5,7 @@ RUN apk add --no-cache \
     bash \
     icu-data-full \
     icu-libs \
-    libc6-compat
+    gcompat
     
 ENV OTEL_DOTNET_AUTO_HOME=/usr/local/otel-dotnet-auto
 
