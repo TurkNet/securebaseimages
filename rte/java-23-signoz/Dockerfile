@@ -23,19 +23,11 @@ ENV OTEL_TRACES_EXPORTER=otlp \
     OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
     OTEL_EXPORTER_OTLP_INSECURE=true
 
-
-ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
-    OTEL_TRACES_EXPORTER=otlp \
-    OTEL_METRICS_EXPORTER=otlp \
-    OTEL_LOGS_EXPORTER=otlp \
-    OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
-    OTEL_EXPORTER_OTLP_INSECURE=true 
-
 FROM otel AS javarte
 
 COPY version /tmp/version
 
-RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-23-jre=$(cat /tmp/version)
+RUN apk update && apk add maven openjdk-23-jre=$(cat /tmp/version)
 
 ENV PATH="/usr/lib/jvm/java-23-openjdk/bin:$PATH"
 
