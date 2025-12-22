@@ -12,6 +12,8 @@ RUN npm install -g \
     @opentelemetry/exporter-trace-otlp-http && \
     chmod -R a+rX /usr/lib/node_modules
 
+ENV NODE_PATH=/usr/lib/node_modules
+
 ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
     OTEL_TRACES_EXPORTER=otlp \
     OTEL_METRICS_EXPORTER=otlp \
