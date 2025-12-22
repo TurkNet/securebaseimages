@@ -25,4 +25,7 @@ ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
     OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
     OTEL_EXPORTER_OTLP_INSECURE=true 
 
+WORKDIR /app
 CMD ["tail", "-f", "/dev/null"]
+
+
