@@ -5,14 +5,18 @@ COPY version /tmp/version
 RUN apk update && apk add --no-cache icu=75.1-r42 icu-dev=75.1-r8 && \
     apk update && apk add --no-cache npm=10.9.2-r0 yarn=1.22.22-r2 nodejs-18=$(cat /tmp/version)
 
-RUN npm install -g \
+ENV OTEL_NODE_HOME=/opt/otel-nodejs
+WORKDIR $OTEL_NODE_HOME
+
+RUN npm init -y && \
+    npm install \
     @opentelemetry/api \
     @opentelemetry/sdk-node \
     @opentelemetry/auto-instrumentations-node \
     @opentelemetry/exporter-trace-otlp-http && \
-    chmod -R a+rX /usr/lib/node_modules
+    chmod -R a+rX /opt/otel-nodejs
 
-ENV NODE_PATH=/usr/lib/node_modules
+ENV NODE_PATH=$OTEL_NODE_HOME/node_modules:$NODE_PATH
 
 ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
     OTEL_TRACES_EXPORTER=otlp \
@@ -21,4 +25,5 @@ ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector.devops.svc:4318 \
     OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
     OTEL_EXPORTER_OTLP_INSECURE=true 
 
+WORKDIR /app
 CMD ["tail", "-f", "/dev/null"]
