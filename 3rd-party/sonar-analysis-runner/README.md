@@ -1,0 +1,2 @@
+docker buildx build --platform=linux/amd64 --tag registry.turknet.net.tr/securebaseimages/runnerimages/tn-sonar-analysis-runner:0.0.1 -f ./Dockerfile .
+docker push registry.turknet.net.tr/securebaseimages/runnerimages/tn-sonar-analysis-runner:0.0.1
