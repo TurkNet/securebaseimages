@@ -13,7 +13,7 @@ icu-dev=75.1-r8 \
 libcrypto3=3.6.1-r0 \
 libssl3=3.6.1-r0 \
 libstdc++=14.2.0-r11 \
-libunwind-dev=1.8.1-r2 \
+libunwind-dev=1.8.3-r1 \
 libuuid=2.41-r0 \
 # TODO: Critic zaafiyet var diye commentlendi.
 # CRITICAL CVE-2024-5535
