@@ -9,7 +9,7 @@ pcre-dev=8.45-r7 \
 perl=5.42.0-r1 \
 pkgconf=2.5.1-r1 \
 readline-dev=8.3-r1 \
-zlib-dev=1.3.1-r6 \
+zlib-dev \
 zlib
 
 COPY version /tmp/version
