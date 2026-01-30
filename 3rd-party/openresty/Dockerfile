@@ -2,13 +2,13 @@ FROM turknethub/tn-wolfios:0.0.6-169 AS build
 
 RUN apk update && apk add --no-cache \
 build-base=1-r8 \
-gcc=14.2.0-r2 \
-git=2.46.0-r2 \
-make=4.4.1-r3 \
-pcre-dev=8.45-r3 \
-perl=5.40.0-r3 \
-pkgconf=2.3.0-r0 \
-readline-dev=8.2.13-r0
+gcc=15.2.0-r6 \
+git=2.52.0-r2 \
+make=4.4.1-r8 \
+pcre-dev=8.45-r7 \
+perl=5.42.0-r1 \
+pkgconf=2.5.1-r1 \
+readline-dev=8.3-r1
 
 COPY version /tmp/version
 
