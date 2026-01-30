@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.5-114 AS otel
+FROM turknethub/tn-wolfios:0.0.6-169 AS otel
 
 
 RUN apk add --no-cache \
