@@ -31,7 +31,9 @@ RUN git clone https://github.com/nginx-modules/ngx_cache_purge.git \
     && wget https://openresty.org/download/openresty-$(cat /tmp/version).tar.gz \
     && tar -zxvf openresty-$(cat /tmp/version).tar.gz \
     && cd openresty-$(cat /tmp/version) \
-    && ./configure --add-module=/tmp/ngx_cache_purge --add-module=/tmp/nginx_upstream_check_module --with-http_v2_module --with-http_realip_module \
+    && wget https://zlib.net/zlib-1.3.1.tar.gz \
+    && tar -zxvf zlib-1.3.1.tar.gz \
+    && ./configure --add-module=/tmp/ngx_cache_purge --add-module=/tmp/nginx_upstream_check_module --with-http_v2_module --with-http_realip_module --with-zlib=/tmp/zlib-1.3.1 \
     && make && make install \
     && rm -rf /tmp/*
 
