@@ -3,7 +3,7 @@ FROM turknethub/tn-wolfios:0.0.6-169
 COPY version /tmp/version
 
 RUN apk update && apk add --no-cache icu=75.1-r42 icu-dev=75.1-r8 && \
-    apk update && apk add npm=11.7.0-r0 yarn=1.22.22-r2 nodejs-20=$(cat /tmp/version)
+    apk update && apk add npm=11.8.0-r0 yarn=1.22.22-r3 nodejs-20=$(cat /tmp/version)
 
 ENV OTEL_NODE_HOME=/opt/otel-nodejs
 WORKDIR $OTEL_NODE_HOME
