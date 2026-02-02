@@ -1,7 +1,6 @@
 FROM turknethub/tn-wolfios:0.0.6-169 AS newrelic
 
-ARG TARGETARCH
-ARG NewRelicVersion=10.29.0
+ARG NewRelicVersion=10.46.0
 ARG NewRelicHome=/usr/local/newrelic-dotnet-agent
 ARG NEWRELICKEY=""
 ENV CORECLR_ENABLE_PROFILING=1 \
@@ -11,9 +10,10 @@ ENV CORECLR_ENABLE_PROFILING=1 \
     NEW_RELIC_LICENSE_KEY=$NEWRELICKEY \
     NEW_RELIC_APPLICATION_LOGGING_ENABLED=false \
     NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false \
-    NEW_RELIC_APPLICATION_LOGGING_METRICS_ENABLED=false
+    NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED=false
+
     
-ARG NewRelicFile=newrelic-dotnet-agent_${TARGETARCH}.tar.gz
+ARG NewRelicFile=newrelic-dotnet-agent_amd64.tar.gz
 ARG NewRelicUrl=https://download.newrelic.com/dot_net_agent/previous_releases/$NewRelicVersion/$NewRelicFile
 
 RUN mkdir "${NewRelicHome}" && \
@@ -23,6 +23,30 @@ FROM newrelic AS dotnetrte
 
 COPY version /tmp/version
 
-RUN apk update && apk add --no-cache dotnet-8=$(cat /tmp/version) dotnet-8-runtime=$(cat /tmp/version) aspnet-8-runtime=$(cat /tmp/version)
+RUN mkdir /dotnet
+ENV PATH /dotnet:$PATH
+
+WORKDIR /dotnet
+
+# Enable globalization and time zones:
+# https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
+ENV \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
+RUN apk add --no-cache \
+    icu-data-full \
+    icu-libs
+
+RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+chmod +x ./dotnet-install.sh
+
+RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
+RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
+
+RUN rm -f ./dotnet-install.sh
+
 
 CMD ["tail", "-f", "/dev/null"]

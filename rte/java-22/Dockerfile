@@ -17,7 +17,7 @@ FROM newrelic AS rte
 
 COPY version /tmp/version
 
-RUN apk update && apk add maven-3.8=3.8.8-r0 openjdk-22-jre=$(cat /tmp/version)
+RUN apk update && apk add maven-3.9=3.9.12-r0 openjdk-22-jre=$(cat /tmp/version)
 
 ENV PATH="/usr/lib/jvm/java-22-openjdk/bin:$PATH"
 
