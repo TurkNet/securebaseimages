@@ -37,8 +37,33 @@ ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://signoz-otel-collector.devops.svc:4318" \
 
 FROM otel AS dotnetrte
 
+
 COPY version /tmp/version
 
-RUN apk update && apk add --no-cache dotnet-8=$(cat /tmp/version) dotnet-8-runtime=$(cat /tmp/version) aspnet-8-runtime=$(cat /tmp/version)
+RUN mkdir /dotnet
+ENV PATH /dotnet:$PATH
+
+WORKDIR /dotnet
+
+# Enable globalization and time zones:
+# https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
+ENV \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
+RUN apk add --no-cache \
+    icu-data-full \
+    icu-libs
+
+RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+chmod +x ./dotnet-install.sh
+
+RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
+RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
+./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
+
+RUN rm -f ./dotnet-install.sh
+
 
 CMD ["tail", "-f", "/dev/null"]

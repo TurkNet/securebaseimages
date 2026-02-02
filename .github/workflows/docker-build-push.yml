@@ -29,6 +29,8 @@ jobs:
       - name: Build and push Docker images
         run: |
           changed_dirs=()
+          pushed_images_file="pushed_images.txt"
+          : > "$pushed_images_file"
 
           for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
             if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
@@ -59,4 +61,25 @@ jobs:
             full_tag=turknethub/$image_name:$version-${{ github.run_number }}
 
             docker buildx build --platform=linux/amd64,linux/arm64 --tag $full_tag -f $dockerfile $dir --push
+            echo "$full_tag" >> "$pushed_images_file"
           done
+
+          echo ""
+          echo "=========================================="
+          echo "Push edilen Docker imajları:"
+          echo "=========================================="
+          if [ -s "$pushed_images_file" ]; then
+            cat "$pushed_images_file"
+          else
+            echo "(Bu çalıştırmada push edilen imaj yok)"
+          fi
+          echo "=========================================="
+
+      - name: Pushed images summary
+        if: always()
+        run: |
+          if [ -f pushed_images.txt ] && [ -s pushed_images.txt ]; then
+            echo "## Push edilen imaj listesi"
+            echo ""
+            while read -r img; do echo "- \`$img\`"; done < pushed_images.txt
+          fi
