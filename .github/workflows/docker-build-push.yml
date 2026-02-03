@@ -33,7 +33,7 @@ jobs:
           : > "$pushed_images_file"
 
           for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]]; then
+            if [[ "$added_modified_file" == *"Dockerfile" ]] || [[ "$added_modified_file" == *"version" ]] || [[ "$added_modified_file" == *"CHANGELOG" ]]; then
               dir=$(dirname "$added_modified_file")
               changed_dirs+=("$dir")
             fi
