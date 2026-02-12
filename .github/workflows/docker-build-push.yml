@@ -46,10 +46,10 @@ jobs:
             base_dir=$(echo $dir | cut -d'/' -f1)
             sub_dir=$(basename $dir)
 
-            if [[ "$sub_dir" == *"signoz"* ]]; then
-              echo "Atlanıyor (signoz): $dir"
-              continue
-            fi
+            # if [[ "$sub_dir" == *"signoz"* ]]; then
+            #   echo "Atlanıyor (signoz): $dir"
+            #   continue
+            # fi
 
             if [ "$base_dir" = "wolfios-base" ]; then
               image_name="tn-wolfios"
