@@ -9,12 +9,11 @@ WORKDIR $OTEL_PYTHON_HOME
 
 RUN python3 -m pip install --no-cache-dir --prefix=$OTEL_PYTHON_HOME \
     opentelemetry-distro \
-    opentelemetry-exporter-otlp \
-    opentelemetry-bootstrap && \
+    opentelemetry-exporter-otlp && \
     chmod -R a+rX $OTEL_PYTHON_HOME
 
 ENV PATH=$OTEL_PYTHON_HOME/bin:$PATH
-ENV PYTHONPATH=$OTEL_PYTHON_HOME/lib/python3.13/site-packages:$PYTHONPATH
+ENV PYTHONPATH=$OTEL_PYTHON_HOME/lib/python3.13/site-packages
 
 ENV OTEL_TRACES_EXPORTER=otlp \
     OTEL_METRICS_EXPORTER=otlp \
