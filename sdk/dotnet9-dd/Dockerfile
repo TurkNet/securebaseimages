@@ -28,7 +28,7 @@ RUN rm -f ./dotnet-install.sh
 
 
 RUN mkdir -p /dotnet/datadog-source \
-    && wget -O /tmp/datadog-dotnet-apm.tar.gz https://github.com/DataDog/dd-trace-dotnet/releases/latest/download/datadog-dotnet-apm.tar.gz \
+    && wget -O /tmp/datadog-dotnet-apm.tar.gz https://github.com/DataDog/dd-trace-dotnet/releases/download/v3.7.0/datadog-dotnet-apm-3.7.0-x64-linux.tar.gz \
     && tar -xzf /tmp/datadog-dotnet-apm.tar.gz -C /dotnet/datadog-source \
     && rm /tmp/datadog-dotnet-apm.tar.gz
 
