@@ -7,22 +7,24 @@ ENV PATH /dotnet:$PATH
 
 WORKDIR /dotnet
 
-# Enable globalization and time zones
 ENV \
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
+
 RUN apk add --no-cache \
     icu-data-full \
-    icu-libs
+    icu-libs \
+    libc6-compat \
+    gcompat
 
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
-chmod +x ./dotnet-install.sh
+    chmod +x ./dotnet-install.sh
 
 RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
+    ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
 RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
+    ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
 
 RUN rm -f ./dotnet-install.sh
 
