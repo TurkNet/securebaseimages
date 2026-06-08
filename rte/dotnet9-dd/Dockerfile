@@ -3,7 +3,7 @@ FROM turknethub/tn-wolfios:0.0.6-169 AS dotnetrte
 COPY version /tmp/version
 
 RUN mkdir /dotnet
-ENV PATH /dotnet:$PATH
+ENV PATH=/dotnet:$PATH
 
 WORKDIR /dotnet
 
@@ -14,9 +14,7 @@ ENV \
 
 RUN apk add --no-cache \
     icu-data-full \
-    icu-libs \
-    libc6-compat \
-    gcompat
+    icu-libs
 
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
     chmod +x ./dotnet-install.sh
@@ -28,8 +26,9 @@ RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
 
 RUN rm -f ./dotnet-install.sh
 
+# MUSL OLMAYAN STANDART PAKETİ ÇEKİYORUZ
 RUN mkdir -p /dotnet/datadog-source \
-    && wget -O /tmp/datadog-dotnet-apm.tar.gz https://github.com/DataDog/dd-trace-dotnet/releases/download/v3.45.0/datadog-dotnet-apm-3.45.0-musl.tar.gz \
+    && wget -O /tmp/datadog-dotnet-apm.tar.gz https://github.com/DataDog/dd-trace-dotnet/releases/download/v3.45.0/datadog-dotnet-apm-3.45.0.tar.gz \
     && tar -xzf /tmp/datadog-dotnet-apm.tar.gz -C /dotnet/datadog-source \
     && rm /tmp/datadog-dotnet-apm.tar.gz
 
