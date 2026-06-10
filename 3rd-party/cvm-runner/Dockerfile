@@ -1,6 +1,6 @@
-FROM turknethub/tn-wolfios:0.0.4-78
+FROM turknethub/tn-wolfios:0.0.6-169
 
-RUN apk update && apk add --no-cache \
+RUN apk update && apk upgrade && apk add --no-cache \
     jq \
     git \
     python3 \

@@ -1,13 +1,13 @@
-FROM turknethub/tn-wolfios:0.0.5-114
+FROM turknethub/tn-wolfios:0.0.6-169
 
-RUN apk update && apk add --no-cache \
+RUN apk update && apk upgrade && apk add --no-cache \
     ca-certificates \
     dotnet-10 \
-    openjdk-17-jre=17.0.16-r1 \
-    maven-3.9=3.9.11-r1 \
-    npm=11.4.2-r1 \
-    yarn=1.22.22-r2 \
-    nodejs-22=22.17.1-r1 \
+    openjdk-17-jre \
+    maven-3.9 \
+    npm \
+    yarn \
+    nodejs-22 \
     jq \
     git \
     unzip \
@@ -30,9 +30,9 @@ RUN dotnet tool install --global dotnet-sonarscanner
 RUN dotnet tool install --global dotnet-reportgenerator-globaltool
 RUN dotnet tool install --global coverlet.console
 
-RUN curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-7.0.2.4839-linux-x64.zip && \
+RUN curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-8.1.0.6389-linux-x64.zip && \
     unzip sonar-scanner.zip -d /opt && \
-    mv /opt/sonar-scanner-7.0.2.4839-linux-x64 /opt/sonar-scanner && \
+    mv /opt/sonar-scanner-8.1.0.6389-linux-x64 /opt/sonar-scanner && \
     rm sonar-scanner.zip && \
     mkdir /usr/local/bin/ && \
     ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner

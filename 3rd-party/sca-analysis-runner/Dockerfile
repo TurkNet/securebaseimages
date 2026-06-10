@@ -1,13 +1,13 @@
-FROM turknethub/tn-wolfios:0.0.4-78
+FROM turknethub/tn-wolfios:0.0.6-169
 
-RUN apk update && apk add --no-cache \
+RUN apk update && apk upgrade && apk add --no-cache \
     dotnet-9 \
     dotnet-9-sdk \
-    openjdk-17-jre=17.0.14-r2 \
-    maven-3.8=3.8.8-r0 \
-    npm=10.8.2-r0 \
-    yarn=1.22.22-r1 \
-    nodejs-22=22.7.0-r0 \
+    openjdk-17-jre \
+    maven-3.9 \
+    npm \
+    yarn \
+    nodejs-22 \
     git \
     unzip \
     zip 

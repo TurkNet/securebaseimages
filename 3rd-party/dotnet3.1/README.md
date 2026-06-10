@@ -1,0 +1,1 @@
+docker buildx build --platform=linux/amd64 --tag registry.turknet.net.tr/devops/dotnet/core/sdk:3.1 -f ./Dockerfile . --push
