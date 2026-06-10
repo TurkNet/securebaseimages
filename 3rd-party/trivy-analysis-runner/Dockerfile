@@ -3,7 +3,7 @@ FROM turknethub/tn-wolfios:0.0.6-169
 RUN apk update && apk upgrade && apk add --no-cache \
     openjdk-17-jre \
     git \
-    jq \
+    jq=1.7.1-r6 \
     sudo \
     docker-cli
 

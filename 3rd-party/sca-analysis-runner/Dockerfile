@@ -10,6 +10,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     nodejs-22 \
     git \
     unzip \
+    jq=1.7.1-r6 \
     zip 
 
 RUN curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip && \

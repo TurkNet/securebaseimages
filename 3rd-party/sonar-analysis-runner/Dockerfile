@@ -8,7 +8,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     npm \
     yarn \
     nodejs-22 \
-    jq \
+    jq=1.7.1-r6 \
     git \
     unzip \
     zip
