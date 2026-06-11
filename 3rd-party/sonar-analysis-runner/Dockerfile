@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-169
+FROM turknethub/tn-wolfios:0.0.6-229
 
 RUN apk update && apk upgrade && apk add --no-cache \
     ca-certificates \
@@ -8,7 +8,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     npm \
     yarn \
     nodejs-22 \
-    jq=1.7.1-r6 \
+    jq \
     git \
     unzip \
     zip

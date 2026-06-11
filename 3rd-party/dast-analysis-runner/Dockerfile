@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-169
+FROM turknethub/tn-wolfios:0.0.6-229
 
 RUN apk update && apk upgrade && apk add --no-cache \
     openjdk-17-jre \

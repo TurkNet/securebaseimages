@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-169
+FROM turknethub/tn-wolfios:0.0.6-229
 
 RUN apk update && apk upgrade && apk add --no-cache \
     dotnet-9 \
@@ -10,7 +10,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     nodejs-22 \
     git \
     unzip \
-    jq=1.7.1-r6 \
+    jq \
     zip 
 
 RUN curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip && \
