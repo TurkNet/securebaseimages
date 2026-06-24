@@ -22,7 +22,9 @@ libuuid=2.42.1-r1 \
 ncurses-dev=6.6.20260608-r0 \
 openssl=3.6.3-r0 \
 openssl-dev=3.6.3-r0 \
-openssl-doc=3.6.3-r0 \
+# TODO: Critic zaafiyet var diye commentlendi.
+# CRITICAL CVE-2026-8376
+# openssl-doc=3.6.3-r0 \
 tzdata=2026b-r0 \
 wget=1.25.0-r14 \
 zlib-dev=1.3.2-r3
