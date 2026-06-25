@@ -25,6 +25,7 @@ chmod +x ./dotnet-install.sh
 RUN echo "Installing dotnet SDK Version = $(cat /tmp/version)" && \
 ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --architecture ${TARGETARCH}
 
+
 RUN rm -f ./dotnet-install.sh
 
 CMD ["tail", "-f", "/dev/null"]

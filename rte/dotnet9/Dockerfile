@@ -28,6 +28,7 @@ ENV PATH /dotnet:$PATH
 
 WORKDIR /dotnet
 
+
 # Enable globalization and time zones:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
 ENV \
