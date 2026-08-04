@@ -3,31 +3,32 @@ FROM cgr.dev/chainguard/wolfi-base:latest
 RUN apk update
 
 RUN apk add --no-cache \
-bash=5.3-r12 \
-busybox=1.37.0-r60 \
-curl=8.20.0-r1 \
-dumb-init=1.2.5-r11 \
-gettext=1.0-r6 \
-glibc-locale-en=2.43-r8 \
-icu-dev=78.3-r1 \
-libcrypto3=3.6.3-r0 \
-libssl3=3.6.3-r0 \
-libstdc++=16.1.0-r2 \
-libunwind-dev=1.8.3-r4 \
-libuuid=2.42.1-r1 \
-# TODO: Critic zaafiyet var diye commentlendi.
-# CRITICAL CVE-2024-5535
-# https://scout.docker.com/v/CVE-2024-5535
-# openssl-config=3.3.0-r5 \
-ncurses-dev=6.6.20260608-r0 \
-openssl=3.6.3-r0 \
-openssl-dev=3.6.3-r0 \
-# TODO: Critic zaafiyet var diye commentlendi.
-# CRITICAL CVE-2026-8376
-# openssl-doc=3.6.3-r0 \
-tzdata=2026b-r0 \
-wget=1.25.0-r14 \
-zlib-dev=1.3.2-r3
+    bash=5.3-r12 \
+    busybox=1.37.0-r60 \
+    curl=8.20.0-r1 \
+    dumb-init=1.2.5-r11 \
+    gettext=1.0-r6 \
+    glibc-locale-en=2.43-r8 \
+    icu-dev=78.3-r1 \
+    libcrypto3=3.6.3-r0 \
+    libssl3=3.6.3-r0 \
+    libstdc++=16.1.0-r2 \
+    libunwind-dev=1.8.3-r4 \
+    libuuid=2.42.1-r1 \
+    # TODO: Critic zaafiyet var diye commentlendi.
+    # CRITICAL CVE-2024-5535
+    # https://scout.docker.com/v/CVE-2024-5535
+    # openssl-config=3.3.0-r5 \
+    ncurses-dev=6.6.20260608-r0 \
+    openssl=3.6.3-r0 \
+    openssl-dev=3.6.3-r0 \
+    # TODO: Critic zaafiyet var diye commentlendi.
+    # CRITICAL CVE-2026-8376
+    # openssl-doc=3.6.3-r0 \
+    tzdata=2026b-r0 \
+    wget=1.25.0-r14 \
+    zlib-dev=1.3.2-r3 \
+    perl=5.44.0-r0
 
 RUN adduser -D -u 1000 -g 0 appuser
 RUN chown -R appuser:0 /home/appuser && chmod -R g=u /home/appuser
