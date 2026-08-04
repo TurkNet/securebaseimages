@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-169 AS dotnet
+FROM turknethub/tn-wolfios:0.0.6-234 AS dotnet
 
 ARG TARGETARCH
 
@@ -20,10 +20,10 @@ RUN apk add --no-cache \
     icu-libs
 
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
-chmod +x ./dotnet-install.sh
+    chmod +x ./dotnet-install.sh
 
 RUN echo "Installing dotnet SDK Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --architecture ${TARGETARCH}
+    ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --architecture ${TARGETARCH}
 
 RUN rm -f ./dotnet-install.sh
 

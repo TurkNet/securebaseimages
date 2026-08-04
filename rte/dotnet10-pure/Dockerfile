@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-169 AS dotnetrte
+FROM turknethub/tn-wolfios:0.0.6-234 AS dotnetrte
 
 COPY version /tmp/version
 
@@ -18,12 +18,12 @@ RUN apk add --no-cache \
     icu-libs
 
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
-chmod +x ./dotnet-install.sh
+    chmod +x ./dotnet-install.sh
 
 RUN echo "Installing dotnet RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
+    ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime dotnet
 RUN echo "Installing aspnetcore RTE Version = $(cat /tmp/version)" && \
-./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
+    ./dotnet-install.sh --version $(cat /tmp/version) --install-dir /dotnet --runtime aspnetcore
 
 RUN rm -f ./dotnet-install.sh
 
