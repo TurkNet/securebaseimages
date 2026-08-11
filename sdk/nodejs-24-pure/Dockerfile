@@ -1,8 +1,8 @@
-FROM turknethub/tn-wolfios:0.0.6-169
+FROM turknethub/tn-wolfios:0.0.6-239
 
 COPY version /tmp/version
 
-RUN apk update && apk add --no-cache icu=75.1-r42 icu-dev=75.1-r8 && \
+RUN apk update && apk add --no-cache icu=78.3-r1 icu-dev=78.3-r1 && \
     apk update && apk add --no-cache npm=11.12.1-r3 yarn=1.22.22-r2 nodejs-24=$(cat /tmp/version)
 
 CMD ["tail", "-f", "/dev/null"]
