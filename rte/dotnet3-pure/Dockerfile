@@ -1,4 +1,4 @@
-FROM turknethub/tn-wolfios:0.0.6-234 AS  dotnetrte
+FROM turknethub/tn-wolfios:0.0.6-234 AS dotnetrte
 
 COPY version /tmp/version
 
@@ -13,19 +13,29 @@ ENV \
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
+
 RUN apk add --no-cache \
+    binutils \
     icu-data-full \
     icu-libs \
     krb5-libs \
-    libgcc
+    libgcc \
+    ca-certificates
+
+# Wolfi OS glibc tabanlı olduğu için glibc ile derlenmiş libssl1.1 ve libcrypto1.1 gereklidir
 RUN ARCH=$(uname -m) && \
-    wget https://dl-cdn.alpinelinux.org/alpine/v3.16/main/${ARCH}/libssl1.1-1.1.1w-r1.apk -O /tmp/libssl.apk && \
-    wget https://dl-cdn.alpinelinux.org/alpine/v3.16/main/${ARCH}/libcrypto1.1-1.1.1w-r1.apk -O /tmp/libcrypto.apk && \
-    tar -xzf /tmp/libssl.apk -C /tmp && \
-    tar -xzf /tmp/libcrypto.apk -C /tmp && \
-    cp /tmp/lib/libssl.so.1.1 /usr/lib/ && \
-    cp /tmp/lib/libcrypto.so.1.1 /usr/lib/ && \
-    rm -rf /tmp/libssl.apk /tmp/libcrypto.apk /tmp/lib
+    if [ "$ARCH" = "x86_64" ]; then \
+    URL="http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+    URL="http://ports.ubuntu.com/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_arm64.deb"; \
+    fi && \
+    cd /tmp && \
+    wget -q "$URL" -O libssl1.1.deb && \
+    ar -x libssl1.1.deb && \
+    tar -xf data.tar.xz && \
+    (cp usr/lib/*/*so.1.1 /usr/lib/ 2>/dev/null || cp usr/lib/*so.1.1 /usr/lib/ 2>/dev/null) && \
+    rm -rf /tmp/libssl* /tmp/data.tar.xz /tmp/control.tar.xz /tmp/debian-binary /tmp/usr && \
+    apk del binutils
 
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
     chmod +x ./dotnet-install.sh
