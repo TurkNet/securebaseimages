@@ -8,8 +8,8 @@ RUN apk add --no-cache \
     curl=8.20.0-r1 \
     dumb-init=1.2.5-r11 \
     gettext=1.0-r6 \
-    glibc=2.43-r12 \
-    glibc-locale-en=2.43-r12 \
+    glibc=2.44-r9 \
+    glibc-locale-en=2.44-r9 \
     icu-dev=78.3-r1 \
     libcrypto3=3.6.3-r0 \
     libssl3=3.6.3-r0 \
