@@ -8,8 +8,8 @@ RUN apk add --no-cache \
     curl=8.20.0-r1 \
     dumb-init=1.2.5-r11 \
     gettext=1.0-r6 \
-    glibc=2.43-r12 \
-    glibc-locale-en=2.43-r12 \
+    glibc=2.44-r9 \
+    glibc-locale-en=2.44-r9 \
     icu-dev=78.3-r1 \
     libcrypto3=3.6.3-r0 \
     libssl3=3.6.3-r0 \
@@ -28,7 +28,7 @@ RUN apk add --no-cache \
     # openssl-doc=3.6.3-r0 \
     tzdata=2026b-r0 \
     wget=1.25.0-r14 \
-    zlib-dev=1.3.2-r4 \
+    zlib-dev=1.3.2.1_rc20260921-r0 \
     perl=5.44.0-r0
 
 RUN adduser -D -u 1000 -g 0 appuser
