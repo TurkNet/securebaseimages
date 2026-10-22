@@ -21,8 +21,8 @@ RUN apk add --no-cache \
     # https://scout.docker.com/v/CVE-2024-5535
     # openssl-config=3.3.0-r5 \
     ncurses-dev=6.6.20260608-r0 \
-    openssl=3.6.3-r0 \
-    openssl-dev=3.6.3-r0 \
+    openssl=4.0.3-r8 \
+    openssl-dev=4.0.3-r8 \
     # TODO: Critic zaafiyet var diye commentlendi.
     # CRITICAL CVE-2026-8376
     # openssl-doc=3.6.3-r0 \
